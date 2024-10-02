@@ -104,7 +104,7 @@
 				renderer.xr.getCamera().getWorldDirection(direction) 
 				//camera.getWorldDirection( direction );
 				objects.forEach(function(o) {
-					o.position.add(direction.multiplyScalar(1))
+					o.position.add(direction.negate())
 				})
 				//scene.position.add(direction.multiplyScalar(1))
 				//camera.position.add(direction.multiplyScalar(1))
