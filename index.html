@@ -101,7 +101,7 @@
 				let direction = new THREE.Vector3();
 				//let e = camera.matrixWorld.elements
 				//direction = new THREE.Vector3(-e[8],660 -e[9], -e[10]).normalize()
-				renderer.xr.getCamera().getWorldDirection(direction) 
+				renderer.xr.getCamera().getWorldDirection(direction.negate()) 
 				//camera.getWorldDirection( direction );
 				objects.forEach(function(o) {
 					o.position.add(direction)
