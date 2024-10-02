@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - geometries</title>
+		<title>flydream</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	</head>
@@ -17,14 +17,11 @@
           </script>
 
 		<script type="module">
-
 			import * as THREE from 'three';
-
-			import Stats from 'three/addons/libs/stats.module.js';
 			import { VRButton } from 'three/addons/webxr/VRButton.js';
 
 
-			let camera, scene, objects,renderer, stats, direction, camera_group;
+			let camera, camera_group, scene, objects,renderer, stats, direction;
 
 			init();
 			function init() {
@@ -43,21 +40,38 @@
 
 				const pointLight = new THREE.PointLight( 0xffffff, 2.5, 0, 0 );
 				camera.add( pointLight );
+				camera.lookAt( scene.position );
 				scene.add( camera );
+				camera_group = new THREE.Group();
+				camera_group.position.set(0,0,0);
+				camera_group.add( camera );
+				scene.add(camera_group);
 
 				const material = new THREE.MeshPhongMaterial();
 
-				for (let i = 0; i < 500; i++) {
-					object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
-					let x = Math.random()*1000 - 500
-					let y = Math.random()*1000 - 500
-					let z = Math.random()*1000 - 500
+				function rand_num (range, type) {
+					if (type == "int")  return Math.floor(Math.random()*range);
+					if (type == "pos")  return Math.random()*range - range/2;
+					if (type == "size") return Math.random()*range;
+				}
+				for (let i = 0; i < 125; i++) {
+					let r = rand_num(100, "size");
+					object = new THREE.Mesh( new THREE.SphereGeometry( r, 25, 25 ), material );
+					let x = rand_num(2000, "pos");
+					let y = rand_num(2000, "pos");
+					let z = rand_num(2000, "pos");
 					object.position.set( x, y, z );
 					scene.add( object );
 					objects.push(object);
+					for (let j = 0; j < rand_num(10, "int"); j++) {
+						let new_r = r*rand_num(4, "int");
+						object = new THREE.Mesh( new THREE.SphereGeometry( new_r, 25, 25 ), material );
+						object.position.set( x+rand_num(new_r, "pos"), y+rand_num(new_r, "pos"), z+rand_num(new_r, "pos") );
+						scene.add( object );
+						objects.push(object);
+					}
 				}
 				
-
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
                 renderer.setClearColor( 0x87CEEB)
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -65,18 +79,7 @@
 				renderer.setAnimationLoop( animate );
 				renderer.xr.enabled = true;
 				document.body.appendChild( renderer.domElement );
-
-				camera_group = new THREE.Group();
-				camera_group.position.set(0,0,0);
-				camera_group.add( camera );
-				scene.add(camera_group);
-			
-
-				stats = new Stats();
-				//document.body.appendChild( stats.dom );
 				document.body.appendChild( VRButton.createButton( renderer ) );
-
-				camera.lookAt( scene.position );
 
 				window.addEventListener( 'resize', onWindowResize );
 
@@ -94,24 +97,15 @@
 			//
 
 			function animate() {
-
 				render();
-				stats.update();
-
 			}
 
 			function render() {
-
-				const timer = Date.now() * 0.0001;
-
-				let direction = new THREE.Vector3();
-				renderer.xr.getCamera().getWorldDirection(direction)
-				camera_group.position.add(direction) 
-				//objects.forEach(function(o) {
-						//if (objects[0].position.dot(direction)>0) {
-				//			o.position.add(direction.negate())
-						//} else o.position.add(direction)
-				//})
+				if (renderer.xr.isPresenting) {
+					let direction = new THREE.Vector3();
+					renderer.xr.getCamera().getWorldDirection(direction)
+					camera_group.position.add(direction)
+				} 
 
 				renderer.render( scene, camera );
 			}
