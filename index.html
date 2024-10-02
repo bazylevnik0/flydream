@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
 			body {
-				background-image: url('back.jpg');
+				background-color: black;
 			}
 		</style>
 	</head>
@@ -19,24 +19,36 @@
                 "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.149.0/examples/jsm/"
               }
             }
-          </script>
+        </script>
 
 		<script type="module">
 			import * as THREE from 'three';
-			import { VRButton } from 'three/addons/webxr/VRButton.js';
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+			import { VRButton } from 'three/addons/webxr/VRButton.js';
 
+			let camera, camera_group, scene, objects, renderer, direction;
 
-			let camera, camera_group, scene, objects,renderer, stats, direction, planet;
+			let loaders = []; let planets = [];
+			loaders[0] = new GLTFLoader();
+			loaders[1] = new GLTFLoader();
+			loaders[2] = new GLTFLoader();
+			loaders[3] = new GLTFLoader();
 
-			const loader = new GLTFLoader();
-			loader.load( 'planet_0.glb', (gltf)=> {
-				planet = gltf.scene; 
-				init();
+			loaders[0].load( 'planet_0.glb', (gltf_0)=> {
+				planets[0] = gltf_0.scene;
+				loaders[1].load( 'planet_1.glb', (gltf_1)=> {
+					planets[1] = gltf_1.scene
+					loaders[2].load( 'planet_2.glb', (gltf_2)=> {
+						planets[2] = gltf_2.scene;
+						loaders[3].load( 'planet_3.glb', (gltf_3)=> {
+							planets[3] = gltf_3.scene; 
+							init();
+						});
+					});
+				});
 			});
 
 			function init() {
-
 				objects = [];
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
@@ -65,14 +77,15 @@
 					if (type == "pos")  return Math.random()*range - range/2;
 					if (type == "size") return Math.random()*range;
 				}
-				for (let i = 0; i < 255; i++) {
-					object = planet;
-					let x = rand_num(500, "pos");
-					let y = rand_num(500, "pos");
-					let z = rand_num(500, "pos");
-					object.scale.set(100,100,100)
+				for (let i = 0; i < 100; i++) {
+					object = planets[rand_num(4,"int")];
+					let x = rand_num(2000, "pos");
+					let y = rand_num(2000, "pos");
+					let z = rand_num(2000, "pos");
+					let size = rand_num(25, "size");
+					object.scale.set(size,size,size)
 					object.position.set( x, y, z );
-					scene.add( object );
+					scene.add( object.clone() );
 					objects.push(object);
 				}
 				
@@ -90,15 +103,11 @@
 			}
 
 			function onWindowResize() {
-
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
-
 			}
-
-			//
 
 			function animate() {
 				render();
