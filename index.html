@@ -24,11 +24,12 @@
 			import { VRButton } from 'three/addons/webxr/VRButton.js';
 
 
-			let camera, scene, renderer, stats;
+			let camera, scene, objects,renderer, stats;
 
 			init();
-
 			function init() {
+
+				objects = [];
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
 				camera.position.y = 400;
@@ -49,6 +50,7 @@
 				object = new THREE.Mesh( new THREE.SphereGeometry( 75, 20, 10 ), material );
 				object.position.set( 100, 0, 0 );
 				scene.add( object );
+				objects.push(object);
 
 				object = new THREE.Mesh( new THREE.SphereGeometry( 75, 20, 10 ), material );
 				object.position.set( -200, -1000, 0 );
@@ -96,11 +98,16 @@
 
 				//camera.lookAt( scene.position );
 				let direction = new THREE.Vector3();
-				let e = camera.matrixWorld.elements
-				direction = new THREE.Vector3(-e[8], -e[9], -e[10]).normalize()
-				//camera.getWorldDirection(direction) 
+				//let e = camera.matrixWorld.elements
+				//direction = new THREE.Vector3(-e[8], -e[9], -e[10]).normalize()
+				camera.getWorldDirection(direction) 
 				//camera.getWorldDirection( direction );
-				camera.position.add(direction.multiplyScalar(1))
+				objects.forEach(function(object) {
+					object.position.add(direction.multiplyScalar(-1))
+				})
+				//scene.position.add(direction.multiplyScalar(1))
+				//camera.position.add(direction.multiplyScalar(1))
+
 
 				renderer.render( scene, camera );
 			}
