@@ -95,8 +95,11 @@
 				const timer = Date.now() * 0.0001;
 
 				//camera.lookAt( scene.position );
-				let direction = new THREE.Vector3(); 
-				camera.getWorldDirection( direction );
+				let direction = new THREE.Vector3();
+				let e = camera.matrixWorld.elements
+				direction = new THREE.Vector3(-e[8], -e[9], -e[10]).normalize()
+				//camera.getWorldDirection(direction) 
+				//camera.getWorldDirection( direction );
 				camera.position.add(direction.multiplyScalar(1))
 
 				renderer.render( scene, camera );
