@@ -65,6 +65,7 @@
 				renderer.setAnimationLoop( animate );
 				renderer.xr.enabled = true;
 				renderer.xr.cameraAutoUpdate = true; 
+				renderer.xr.setReferenceSpaceType( 'local' );
 				document.body.appendChild( renderer.domElement );
 
 				stats = new Stats();
