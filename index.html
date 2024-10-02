@@ -104,11 +104,11 @@
 				//direction = new THREE.Vector3(-e[8],660 -e[9], -e[10]).normalize()
 				renderer.xr.getCamera().getWorldDirection(direction) 
 				//camera.getWorldDirection( direction );
-				objects.forEach(function(o) {
-					o.position.add(direction.negate())
-				})
+				//objects.forEach(function(o) {
+				//		o.position.add(direction.negate())
+				//})
 				//scene.position.add(direction.multiplyScalar(1))
-				//camera.position.add(direction.multiplyScalar(1))
+				renderer.xr.getCamera().position.add(direction.multiplyScalar(1))
 
 
 				renderer.render( scene, camera );
