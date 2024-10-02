@@ -24,7 +24,7 @@
 			import { VRButton } from 'three/addons/webxr/VRButton.js';
 
 
-			let camera, scene, objects,renderer, stats, direction;
+			let camera, scene, objects,renderer, stats, direction, camera_group;
 
 			init();
 			function init() {
@@ -64,9 +64,13 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.setAnimationLoop( animate );
 				renderer.xr.enabled = true;
-				renderer.xr.cameraAutoUpdate = true; 
-				renderer.xr.setReferenceSpaceType( 'local' );
 				document.body.appendChild( renderer.domElement );
+
+				camera_group = new THREE.Group();
+				camera_group.position.set(0,0,0);
+				camera_group.add( camera );
+				scene.add(camera_group);
+			
 
 				stats = new Stats();
 				//document.body.appendChild( stats.dom );
@@ -101,8 +105,8 @@
 				const timer = Date.now() * 0.0001;
 
 				let direction = new THREE.Vector3();
-				renderer.xr.getCamera().getWorldDirection(direction) 
-				renderer.xr.getCamera().position.add(direction);
+				renderer.xr.getCamera().getWorldDirection(direction)
+				camera_group.position.add(direction) 
 				//objects.forEach(function(o) {
 						//if (objects[0].position.dot(direction)>0) {
 				//			o.position.add(direction.negate())
