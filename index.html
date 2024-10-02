@@ -44,17 +44,15 @@
 				camera.add( pointLight );
 				scene.add( camera );
 
-
 				const material = new THREE.MeshPhongMaterial();
-
-				//
 
 				object = new THREE.Mesh( new THREE.SphereGeometry( 75, 20, 10 ), material );
 				object.position.set( 100, 0, 0 );
 				scene.add( object );
 
-
-				//
+				object = new THREE.Mesh( new THREE.SphereGeometry( 75, 20, 10 ), material );
+				object.position.set( -200, -1000, 0 );
+				scene.add( object );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
                 renderer.setClearColor( 0x87CEEB)
@@ -67,8 +65,6 @@
 				stats = new Stats();
 				document.body.appendChild( stats.dom );
 				document.body.appendChild( VRButton.createButton( renderer ) );
-
-				//
 
 				window.addEventListener( 'resize', onWindowResize );
 
@@ -96,28 +92,13 @@
 
 				const timer = Date.now() * 0.0001;
 
-				//camera.position.x = Math.cos( timer ) * 800;
-				//camera.position.z = Math.sin( timer ) * 800;
-
 				camera.lookAt( scene.position );
-
-				/*
-				scene.traverse( function ( object ) {
-
-					if ( object.isMesh === true ) {
-
-						object.rotation.x = timer * 5;
-						object.rotation.y = timer * 2.5;
-
-					}
-
-				} );
-				*/
+				let direction = new THREE.Vector3(); 
+				camera.getWorldDirection( direction );
+				camera.position.add(direction.multiplyScalar(1))
 
 				renderer.render( scene, camera );
-
 			}
-
 		</script>
 
 	</body>
