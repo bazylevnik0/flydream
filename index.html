@@ -47,11 +47,7 @@
 
 				const material = new THREE.MeshPhongMaterial();
 
-				object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
-				object.position.set( 0, -99999, 0 );
-				scene.add( object );
-				objects.push(object);
-				for (let i = 1; i < 500; i++) {
+				for (let i = 0; i < 500; i++) {
 					object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
 					let x = Math.random()*1000 - 500
 					let y = Math.random()*1000 - 500
@@ -68,6 +64,7 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.setAnimationLoop( animate );
 				renderer.xr.enabled = true;
+				renderer.xr.cameraAutoUpdate = true; 
 				document.body.appendChild( renderer.domElement );
 
 				stats = new Stats();
@@ -102,20 +99,14 @@
 
 				const timer = Date.now() * 0.0001;
 
-				//camera.lookAt( scene.position );
 				let direction = new THREE.Vector3();
-				//let e = camera.matrixWorld.elements
-				//direction = new THREE.Vector3(-e[8],660 -e[9], -e[10]).normalize()
 				renderer.xr.getCamera().getWorldDirection(direction) 
-				//camera.getWorldDirection( direction );
-				objects.forEach(function(o) {
+				renderer.xr.getCamera().position.add(direction);
+				//objects.forEach(function(o) {
 						//if (objects[0].position.dot(direction)>0) {
-							o.position.add(direction.negate())
+				//			o.position.add(direction.negate())
 						//} else o.position.add(direction)
-				})
-				scene.position.add(direction.multiplyScalar(1))
-				//renderer.xr.getCamera().position.add(direction.multiplyScalar(1))
-
+				//})
 
 				renderer.render( scene, camera );
 			}
