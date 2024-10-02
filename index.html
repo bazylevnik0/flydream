@@ -47,15 +47,16 @@
 
 				const material = new THREE.MeshPhongMaterial();
 
-				object = new THREE.Mesh( new THREE.SphereGeometry( 75, 20, 10 ), material );
-				object.position.set( 100, 0, 300 );
-				scene.add( object );
-				objects.push(object);
-
-				object = new THREE.Mesh( new THREE.SphereGeometry( 75, 20, 10 ), material );
-				object.position.set( -200, -1000, 300 );
-				scene.add( object );
-				objects.push(object);
+				for (let i = 0; i < 100; i++) {
+					object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
+					let x = Math.random()*1000 - 500
+					let y = Math.random()*1000 - 500
+					let z = Math.random()*1000 - 500
+					object.position.set( x, y, z );
+					scene.add( object );
+					objects.push(object);
+				}
+				
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
                 renderer.setClearColor( 0x87CEEB)
