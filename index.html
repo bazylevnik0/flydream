@@ -48,13 +48,14 @@
 				const material = new THREE.MeshPhongMaterial();
 
 				object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
-				objects.position.set( 0, -500, 0 );
-				scene.add( objects );
-				for (let i = 1; i < 100; i++) {
+				object.position.set( 0, -500, 0 );
+				scene.add( object );
+				objects.push(object);
+				for (let i = 1; i < 500; i++) {
 					object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
-					let x = Math.random()*1000 - 500
-					let y = Math.random()*1000 - 500
-					let z = Math.random()*1000 - 500
+					let x = Math.random()*2000 - 1000
+					let y = Math.random()*2000 - 1000
+					let z = Math.random()*2000 - 1000
 					object.position.set( x, y, z );
 					scene.add( object );
 					objects.push(object);
