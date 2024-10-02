@@ -55,6 +55,7 @@
 				object = new THREE.Mesh( new THREE.SphereGeometry( 75, 20, 10 ), material );
 				object.position.set( -200, -1000, 0 );
 				scene.add( object );
+				objects.push(object);
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
                 renderer.setClearColor( 0x87CEEB)
@@ -100,10 +101,10 @@
 				let direction = new THREE.Vector3();
 				//let e = camera.matrixWorld.elements
 				//direction = new THREE.Vector3(-e[8], -e[9], -e[10]).normalize()
-				camera.getWorldDirection(direction) 
+				renderer.xr.getCamera().getWorldDirection(direction) 
 				//camera.getWorldDirection( direction );
-				objects.forEach(function(object) {
-					object.position.add(direction.multiplyScalar(-1))
+				objects.forEach(function(o) {
+					o.position.add(direction.multiplyScalar(-1))
 				})
 				//scene.position.add(direction.multiplyScalar(1))
 				//camera.position.add(direction.multiplyScalar(1))
