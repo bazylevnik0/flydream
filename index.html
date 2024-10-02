@@ -24,7 +24,7 @@
 			import { VRButton } from 'three/addons/webxr/VRButton.js';
 
 
-			let camera, scene, objects,renderer, stats;
+			let camera, scene, objects,renderer, stats, direction;
 
 			init();
 			function init() {
@@ -47,7 +47,10 @@
 
 				const material = new THREE.MeshPhongMaterial();
 
-				for (let i = 0; i < 100; i++) {
+				object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
+				objects.position.set( 0, -500, 0 );
+				scene.add( objects );
+				for (let i = 1; i < 100; i++) {
 					object = new THREE.Mesh( new THREE.SphereGeometry( 25, 25, 15 ), material );
 					let x = Math.random()*1000 - 500
 					let y = Math.random()*1000 - 500
